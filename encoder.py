@@ -21,3 +21,19 @@ ids = [int(vocab[vocab["palavra"] == t]["id"].values[0]) for t in tokens]
 embedding_table = np.random.randn(len(vocab), D_MODEL)
 X = embedding_table[ids]
 X = X.reshape(1, len(ids), D_MODEL)
+
+
+def softmax(x):
+    e = np.exp(x)
+    return e / np.sum(e, axis=-1, keepdims=True)
+
+
+def attention(x, Wq, Wk, Wv):
+    Q = x @ Wq
+    K = x @ Wk
+    V = x @ Wv
+
+    d_k = Q.shape[-1]
+    scores = Q @ K.transpose(0, 2, 1) / np.sqrt(d_k)
+    weights = softmax(scores)
+    return weights @ V
