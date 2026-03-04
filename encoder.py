@@ -48,3 +48,36 @@ def layer_norm(x, eps=1e-6):
 def feed_forward(x, W1, b1, W2, b2):
     hidden = np.maximum(0, x @ W1 + b1)
     return hidden @ W2 + b2
+
+
+def encoder(x, n_camadas):
+    for i in range(n_camadas):
+        Wq = np.random.randn(D_MODEL, D_MODEL)
+        Wk = np.random.randn(D_MODEL, D_MODEL)
+        Wv = np.random.randn(D_MODEL, D_MODEL)
+
+        W1 = np.random.randn(D_MODEL, D_FF)
+        b1 = np.zeros(D_FF)
+        W2 = np.random.randn(D_FF, D_MODEL)
+        b2 = np.zeros(D_MODEL)
+
+        att_out = attention(x, Wq, Wk, Wv)
+        x1 = layer_norm(x + att_out)
+
+        ff_out = feed_forward(x1, W1, b1, W2, b2)
+        x = layer_norm(x1 + ff_out)
+
+        print(f"camada {i+1}: {x.shape}")
+
+    return x
+
+
+if __name__ == "__main__":
+    print("frase:", frase)
+    print("ids:", ids)
+    print("shape entrada:", X.shape)
+    print()
+
+    Z = encoder(X, N_CAMADAS)
+    print()
+    print("shape saida:", Z.shape)
