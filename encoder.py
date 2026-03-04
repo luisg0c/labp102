@@ -43,3 +43,8 @@ def layer_norm(x, eps=1e-6):
     media = np.mean(x, axis=-1, keepdims=True)
     var = np.var(x, axis=-1, keepdims=True)
     return (x - media) / np.sqrt(var + eps)
+
+
+def feed_forward(x, W1, b1, W2, b2):
+    hidden = np.maximum(0, x @ W1 + b1)
+    return hidden @ W2 + b2
