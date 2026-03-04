@@ -37,3 +37,9 @@ def attention(x, Wq, Wk, Wv):
     scores = Q @ K.transpose(0, 2, 1) / np.sqrt(d_k)
     weights = softmax(scores)
     return weights @ V
+
+
+def layer_norm(x, eps=1e-6):
+    media = np.mean(x, axis=-1, keepdims=True)
+    var = np.var(x, axis=-1, keepdims=True)
+    return (x - media) / np.sqrt(var + eps)
