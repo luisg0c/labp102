@@ -24,6 +24,7 @@ X = X.reshape(1, len(ids), D_MODEL)
 
 
 def softmax(x):
+    x = x - np.max(x, axis=-1, keepdims=True)
     e = np.exp(x)
     return e / np.sum(e, axis=-1, keepdims=True)
 
